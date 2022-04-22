@@ -1,0 +1,34 @@
+name: NPM Publish
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16
+          scope: '@hexlyoss'
+      - name: Build and set version
+        id: build-lib
+        env:
+          GH_PACKAGE_AUTH: ${{ secrets.GH_PACKAGE_AUTH }}
+        run: |
+          npm install
+          npm run build
+          rm -rf node_modules
+          npm install --only=prod
+          rm -rf src .git .github node_modules
+
+          VERSION=$(echo $GITHUB_REF | cut -d / -f 3)
+          echo "Setting NPM version to $VERSION"
+          npm version --no-git-tag-version $VERSION
+          cat package.json
+
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}

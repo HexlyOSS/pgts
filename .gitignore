@@ -1,0 +1,4 @@
+node_modules
+sensitive/*
+lib
+.DS_Store
