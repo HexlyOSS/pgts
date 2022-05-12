@@ -13,6 +13,7 @@ jobs:
         with:
           node-version: 16
           scope: '@hexlyoss'
+          registry-url: 'https://registry.npmjs.org'
       - name: Build and set version
         id: build-lib
         env:
@@ -27,7 +28,6 @@ jobs:
           VERSION=$(echo $GITHUB_REF | cut -d / -f 3)
           echo "Setting NPM version to $VERSION"
           npm version --no-git-tag-version $VERSION
-          cat package.json
 
       - run: npm publish --access public
         env:
