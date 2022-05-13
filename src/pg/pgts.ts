@@ -10,7 +10,7 @@ import { PgtsError, PgtsErrorType } from './error'
 import { PgtsQuery } from './query'
 
 export class PgTs {
-  client: IDatabase<any>
+  client?: IDatabase<any>
   #url: string
 
   constructor(url: string, public yesql: YeSQL.Options = {

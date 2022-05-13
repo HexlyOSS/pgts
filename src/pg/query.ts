@@ -22,9 +22,10 @@ export class PgtsQuery<P, R> {
     throw new Error('No PgTs instance available')
   }
 
-  execute(params: P, fn: <T = any>(query: P, values?: any) => Promise<T>): Promise<R>
-  execute(params: P, fn: <T = any>(query: P, values?: any) => Promise<T[]>): Promise<R[]>
-  execute(params: P, fn: <T = any>(query: P, values?: any) => Promise<T | T[]>): Promise<any>{
+  execute(params: P | undefined, fn: <T = any>(query: P, values?: any) => Promise<T>): Promise<R>
+  execute(params: P | undefined, fn: <T = any>(query: P, values?: any) => Promise<T | null>): Promise<R>
+  execute(params: P | undefined, fn: <T = any>(query: P, values?: any) => Promise<T[]>): Promise<R[]>
+  execute(params: P | undefined, fn: <T = any>(query: P, values?: any) => Promise<T | T[]>): Promise<any>{
     const { text: sql, values } = this.compiled(params)
     return fn(sql, values)
       .catch(err => {
